@@ -206,7 +206,13 @@ func ConfigTemplate(fig *figtree.FigTree, template, command string, opts interfa
 		return "", err
 	}
 	fig.LoadAllConfigs(command+".yml", &tmp)
-	fig.LoadAllConfigs("config.yml", &tmp)
+
+	configPrefix := os.Getenv("GOJIRA_CONFIG")
+	if configPrefix == "" {
+		fig.LoadAllConfigs("config.yml", &tmp)
+	} else {
+		fig.LoadAllConfigs(fmt.Sprintf("%s-config.yml", configPrefix), &tmp)
+	}
 
 	tmpl, err := TemplateProcessor().Parse(template)
 	if err != nil {

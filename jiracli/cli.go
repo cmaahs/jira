@@ -277,7 +277,12 @@ func LoadConfigs(cmd *kingpin.CmdClause, fig *figtree.FigTree, opts interface{})
 			return err
 		}
 		// then load generic configs if not already populated above
-		return fig.LoadAllConfigs("config.yml", opts)
+		configPrefix := os.Getenv("GOJIRA_CONFIG")
+		if configPrefix == "" {
+			return fig.LoadAllConfigs("config.yml", opts)
+		} else {
+			return fig.LoadAllConfigs(fmt.Sprintf("%s-config.yml", configPrefix), opts)
+		}
 	})
 }
 

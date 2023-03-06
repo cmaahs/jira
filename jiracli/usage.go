@@ -135,7 +135,12 @@ func CommandLine(fig *figtree.FigTree, o *oreo.Client) *kingpin.Application {
 		CustomCommands kingpeon.DynamicCommands `yaml:"custom-commands" json:"custom-commands"`
 	}{}
 
-	if err := fig.LoadAllConfigs("config.yml", &data); err != nil {
+	configPrefix := os.Getenv("GOJIRA_CONFIG")
+	configFile := "config.yml"
+	if configPrefix != "" {
+		configFile = fmt.Sprintf("%s-config.yml", configPrefix)
+	}
+	if err := fig.LoadAllConfigs(configFile, &data); err != nil {
 		log.Errorf("%s", err)
 		panic(Exit{Code: 1})
 	}
@@ -154,7 +159,12 @@ func CommandLine(fig *figtree.FigTree, o *oreo.Client) *kingpin.Application {
 		}
 
 		tmp := map[string]interface{}{}
-		fig.LoadAllConfigs("config.yml", &tmp)
+		configPrefix := os.Getenv("GOJIRA_CONFIG")
+		configFile := "config.yml"
+		if configPrefix != "" {
+			configFile = fmt.Sprintf("%s-config.yml", configPrefix)
+		}
+		fig.LoadAllConfigs(configFile, &tmp)
 		kingpeon.RegisterDynamicCommandsWithRunner(runner, app, data.CustomCommands, TemplateProcessor())
 	}
 
