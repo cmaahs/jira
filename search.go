@@ -72,7 +72,7 @@ func (o *SearchOptions) ProvideSearchRequest() *jiradata.SearchRequest {
 	return req
 }
 
-// https://docs.atlassian.com/jira/REST/cloud/#api/2/search-searchUsingSearchRequest
+// https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-post
 func (j *Jira) Search(sp SearchProvider, opts ...SearchOpt) (*jiradata.SearchResults, error) {
 	return Search(j.UA, j.Endpoint, sp, opts...)
 }
